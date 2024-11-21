@@ -1,11 +1,8 @@
-# LZ2TreeFile decompressor
+# LZ2TreeFile encoder/decoder
 
-This code can decompress a file in LZ2TreeFile format.  Use it like so:
+This code can encoder/decoder a file in LZ2TreeFile format.  Use it like so:
 
-    node index.js < input.cd3 > output.txt
-
-It really needs to be rewritten as a stream transformer, and a corresponding
-compressor should be implemented so that files can be changed and recompressed.
+    node codec.js (--encode|-e|--decode|-d) -i <input_file> -o <output_file>
 
 ## Licence
 

@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { processInput } = require('./encode.js');
 
 function parseArgs() {
     const args = {
@@ -42,7 +41,7 @@ function main() {
     let output;
 
     if (args.mode === 'encode') {
-        output = processInput(input);
+        output = encode(input);
     } else {
         output = decode(input);
     }
@@ -52,6 +51,37 @@ function main() {
 }
 
 main();
+
+function encode(data) {
+    let output = [];
+    let escape = 0x16;
+    let maxDist = 0x2000;
+
+    const append = (chunk) => {
+        for (const byte of chunk) {
+            output.push(byte);
+        }
+    };
+
+    // Example encoding logic (you need to adapt this based on specific requirements)
+    let pos = 0;
+    while (pos < data.length) {
+        let len = escape;
+        if (pos + len > data.length) {
+            len = data.length - pos;
+        }
+
+        let chunk = Buffer.from(data.slice(pos, pos + len), 'utf8');
+        append(chunk);
+
+        let flag = (chunk.length - 1) & 0xFF; // Length flag
+        output.push(flag);
+
+        pos += len;
+    }
+
+    return Buffer.from(output);
+}
 
 function decode(input) {
     let output = [];
