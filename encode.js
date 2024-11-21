@@ -1,15 +1,3 @@
-const fs = require('fs');
-
-let input = Buffer.alloc(0);
-
-process.stdin.on('data', (chunk) => {
-    input = Buffer.concat([input, chunk]);
-});
-
-process.stdin.on('end', () => {
-    processInput(input);
-});
-
 function processInput(input) {
     const output = [];
     const windowSize = 8192;
@@ -89,5 +77,7 @@ function processInput(input) {
         output.shift();
     }
 
-    process.stdout.write(Buffer.from(output));
+    return Buffer.from(output);
 }
+
+module.exports = { processInput };
