@@ -84,9 +84,9 @@ function processInput(input) {
         }
     }
 
-    // Ensure the output starts with 0x4C (76 in decimal)
-    if (output.length > 0 && output[0] !== 0x4C) {
-        output.unshift(0x4C);
+    // Remove 0x15 from position 0x00 if present
+    if (output.length > 0 && output[0] === 0x15) {
+        output.shift();
     }
 
     process.stdout.write(Buffer.from(output));
