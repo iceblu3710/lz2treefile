@@ -42,7 +42,7 @@ function main() {
     let output;
 
     if (args.mode === 'encode') {
-        output = encode(input);
+        output = processInput(input);
     } else {
         output = decode(input);
     }
