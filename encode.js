@@ -86,7 +86,7 @@ function processInput(input) {
             pos += match.length;
         } else {
             let literalLength = 1;
-            while (literalLength < 0x16 && pos + literalLength < input.length) {
+            while (literalLength < 0x17 && pos + literalLength < input.length) {
                 const nextMatch = findLongestMatch(pos + literalLength);
                 if (nextMatch.length >= minMatchLength) break;
                 literalLength++;
@@ -98,6 +98,11 @@ function processInput(input) {
             }
             pos += literalLength;
         }
+    }
+
+    // Ensure the output starts with 0x4C (76 in decimal)
+    if (output.length > 0 && output[0] !== 0x4C) {
+        output.unshift(0x4C);
     }
 
     process.stdout.write(Buffer.from(output));
