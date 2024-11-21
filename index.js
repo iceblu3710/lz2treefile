@@ -18,9 +18,18 @@
 
 const fs = require('fs');
 
-const input = fs.readFileSync('/dev/stdin');
+let input = Buffer.alloc(0);
 
-let lbLen = 0;
+process.stdin.on('data', (chunk) => {
+    input = Buffer.concat([input, chunk]);
+});
+
+process.stdin.on('end', () => {
+    processInput(input);
+});
+
+function processInput(input) {
+    let lbLen = 0;
 let lbDist = 0;
 let escape = 0x16;
 
@@ -109,3 +118,4 @@ while (offInput < input.length) {
 output = output.slice(0, output.used);
 
 process.stdout.write(output);
+}
