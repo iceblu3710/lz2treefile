@@ -1,23 +1,57 @@
 const fs = require('fs');
 const { processInput: encode } = require('./encode.js');
 
-let input = Buffer.alloc(0);
+function parseArgs() {
+    const args = {
+        mode: null,
+        inputFile: null,
+        outputFile: null
+    };
 
-process.stdin.on('data', (chunk) => {
-    input = Buffer.concat([input, chunk]);
-});
+    for (let i = 2; i < process.argv.length; i++) {
+        switch (process.argv[i]) {
+            case '--encode':
+            case '-e':
+                args.mode = 'encode';
+                break;
+            case '--decode':
+            case '-d':
+                args.mode = 'decode';
+                break;
+            case '-i':
+                args.inputFile = process.argv[++i];
+                break;
+            case '-o':
+                args.outputFile = process.argv[++i];
+                break;
+        }
+    }
 
-process.stdin.on('end', () => {
-    const mode = process.argv[2];
-    if (mode === 'encode') {
-        encode(input);
-    } else if (mode === 'decode') {
-        decode(input);
-    } else {
-        console.error('Usage: node codec.js [encode|decode]');
+    return args;
+}
+
+function main() {
+    const args = parseArgs();
+
+    if (!args.mode || !args.inputFile || !args.outputFile) {
+        console.error('Usage: node codec.js (--encode|-e|--decode|-d) -i <input_file> -o <output_file>');
         process.exit(1);
     }
-});
+
+    const input = fs.readFileSync(args.inputFile);
+    let output;
+
+    if (args.mode === 'encode') {
+        output = encode(input);
+    } else {
+        output = decode(input);
+    }
+
+    fs.writeFileSync(args.outputFile, output);
+    console.log(`${args.mode.charAt(0).toUpperCase() + args.mode.slice(1)}d file saved as ${args.outputFile}`);
+}
+
+main();
 
 function decode(input) {
     let output = [];
@@ -89,5 +123,5 @@ function decode(input) {
         }
     }
 
-    process.stdout.write(Buffer.from(output));
+    return Buffer.from(output);
 }
