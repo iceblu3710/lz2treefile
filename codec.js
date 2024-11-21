@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { processInput: encode } = require('./encode.js');
+const { processInput } = require('./encode.js');
 
 function parseArgs() {
     const args = {
